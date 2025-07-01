@@ -1,0 +1,36 @@
+version: '3.2'
+services:
+  db-mysql-staging:
+   container_name: db-mysql-staging
+   image: mysql/mysql-server:5.7
+   command: mysqld --character-set-server=utf8 --collation-server=utf8_unicode_ci --init-connect='SET NAMES UTF8;' --innodb-flush-log-at-trx-commit=0
+   environment:
+    MYSQL_DATABASE: attableDB
+    MYSQL_ROOT_PASSWORD: admin1234
+    MYSQL_ROOT_HOST: '%'
+    TZ: Asia/Bangkok
+   restart: always
+   volumes:
+      - mysql-db-staging:/var/lib/mysql
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 1001:8080
+  app:
+    restart: always
+    image: artisandigitalasia/attable-backend:staging
+    #build: .
+    environment:
+       - "SPRING_PROFILES_ACTIVE=staging" 
+    ports:
+      - 1003:8080
+    depends_on:
+      - db-mysql-staging
+    links:
+      - db-mysql-staging
+volumes:
+  mysql-db-staging:
+
+#Clean and build .jar file
+#mvn install -DskipTests

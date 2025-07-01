@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>${subject}</title>
+<style>
+body {
+	width: 100%;
+	font-family: 'Roboto', Arial, Helvetica, sans-serif;
+}
+
+.header {
+	box-sizing: border-box;
+	font-size: 14px;
+}
+
+.footer {
+	display: flex;
+	flex-flow: row wrap;
+	height: 92px;
+	padding: 0 40px;
+	background-color: #e6cdd3;
+	box-sizing: border-box;
+}
+
+.box-footer-left {
+	padding: 35px 0;
+	float: left;
+}
+
+.box-footer-right {
+	display: flex;
+	padding: 20px 0;
+	margin-left: auto;
+	float: right;
+}
+
+.box-footer-right label {
+	font-size: 14px;
+	margin-right: 32px;
+	padding: 20px 0;
+	float: left;
+}
+
+.icon-wrapper {
+	width: 42px;
+	height: 42px;
+	margin: 5px 0;
+	float: right;
+}
+
+label {
+	font-size: 14px;
+	margin-right: 60px;
+}
+
+.linkfooter {
+	color: #333333 !important;
+	text-decoration: none !important;
+}
+</style>
+</head>
+<body>
+	<div class="header">
+		<p>Dear Chef ${chefName},</p>
+	</div>
+	<div class="content-top">
+		<p>Your Event Number ${id} for ${eventName} which</p>
+		<p>
+			is scheduled on ${eventDate} ${groupId} is about to happen in<label>${eventPrepare} more days.</label>
+		</p>
+	</div>
+	<div class="content-bottom">
+		<p>Attached is the event summary for the purpose of your advance preparation.</p> 
+		<p>As payments for some bookings may still be under review by our team, we will confirm</p>
+		<p>the final event summary to you ${emailConfirmSeat} days before the event date.</p>
+	</div>
+	<#include "sincerely.html" parse=false encoding="UTF-8">
+	<div class="footer"
+		style="display: flex; flex-flow: row wrap; padding: 0 40px; background-color: #e6cdd3; height: 96px; box-sizing: border-box;">
+		<div class="box-footer-left" style="padding: 40px 0; float: left;">
+			<a class="linkfooter" href="${link}/events"
+				style="font-size: 14px; margin-right: 60px;">BROWSE EVENTS</a> <a
+				class="linkfooter" href="${link}/faq"
+				style="font-size: 14px; margin-right: 60px;">FAQ</a> <a
+				class="linkfooter" href="${link}/contact"
+				style="font-size: 14px; margin-right: 60px;">CONTACT US </a>
+		</div>
+		<div class="box-footer-right"
+			style="display: flex; padding: 20px 0; margin-left: auto; float: right;">
+			<label
+				style="font-size: 14px; margin-right: 32px; padding: 20px 0; float: left">Copyright
+				© 2019 At Table All rights reserved.</label>
+
+			<div class="icon-wrapper"
+				style="width: 42px; height: 42px; float: right;">
+				<a href="https://www.facebook.com/attable.thailand/"> <img
+					style="width: 100%;"
+					src="https://img.icons8.com/metro/52/000000/facebook-new--v2.png" />
+				</a>
+			</div>
+		</div>
+	</div> </body>
+</html>

@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>${subject}</title>
+<style>
+body {
+	width: 100%;
+	font-family: 'Roboto', Arial, Helvetica, sans-serif;
+}
+
+.container {
+	display: table !important;
+	width: 45%;
+	border: 1px solid #800020;
+	padding: 20px 28px;
+	box-sizing: border-box;
+}
+
+.container-left {
+	float: left;
+}
+
+.container-right {
+	float: right;
+}
+
+.inner-containerLeft {
+	display: flex;
+}
+
+.footer {
+	display: flex;
+	flex-flow: row wrap;
+	height: 92px;
+	padding: 0 40px;
+	background-color: #e6cdd3;
+	box-sizing: border-box;
+}
+
+.box-footer-left {
+	padding: 35px 0;
+	float: left;
+}
+
+.box-footer-right {
+	display: flex;
+	padding: 20px 0;
+	margin-left: auto;
+	float: right;
+}
+
+.box-footer-right label {
+	font-size: 14px;
+	margin-right: 32px;
+	padding: 20px 0;
+	float: left;
+}
+
+.icon-wrapper {
+	width: 42px;
+	height: 42px;
+	margin: 5px 0;
+	float: right;
+}
+
+label {
+	font-size: 14px;
+	margin-right: 60px;
+}
+
+.linkfooter {
+	color: #333333 !important;
+	text-decoration: none !important;
+}
+</style>
+</head>
+<body>
+	<div style="box-sizing: border-box; font-size: 14px;">
+		<p>Dear ${dinerName},</p>
+		<p>
+			Your booking (Reservation Number ${id}) for <strong>${eventName}
+			</strong>is
+			<#if refundable== true && reject== true> cannot be cancelled. <#else>
+			now cancelled. </#if>
+		</p>
+	</div>
+	<div class="container" style="display: table !important;">
+		<div class="container-left">
+			<p>Status: ${status}</p>
+			<h5>${eventName}</h5>
+			<p>${eventDate} ${time}</p>
+			<div class="inner-containerLeft">
+				<p style="float: left;">${dinerSize} diners</p>
+				<p style="float: right;">THB ${price}</p>
+			</div>
+		</div>
+		<div class="container-right">
+			<p>Cancellation is</p>
+			<#if refundable== true>
+			<h5>fully refundable</h5>
+			<#else>
+			<h5>non-refundable.</h5></#if>
+		</div>
+	</div>
+	<#if refundable== true && reject== false>
+	<div class="in-order">
+		<p>In order to proceed to refund, we need some additional
+			information from you.</p>
+	</div>
+	<div class="ul-checked">
+		<p>One of the following is required(showing your bank account
+			number)</p>
+		<p>- A screenshot of your online bank statement or passbook</p>
+		<p>- A scan of your official bank statement or passbook</p>
+		<p>- An image of your official bank statement or passbook</p>
+	</div>
+	<#elseif refundable== true && reject== true>
+	<p>Reason Cancel: ${rejectTitle} ${rejectText}</p></#if>
+	<div class="box-confirm"
+		style="text-align: center; background-color: #800020; display: flex; padding: 40px; box-sizing: border-box;">
+		<p
+			style="color: white; width: 100%; text-align: center; font-size: 14px;">
+			Click <a class="clicklink" href="${linkClick}" style="color: white">here</a>
+			to upload document
+		</p>
+	</div>
+	<#include "sincerely.html" parse=false encoding="UTF-8">
+	<div class="footer"
+		style="display: flex; flex-flow: row wrap; padding: 0 40px; background-color: #e6cdd3; height: 96px; box-sizing: border-box;">
+		<div class="box-footer-left" style="padding: 40px 0; float: left;">
+			<a class="linkfooter" href="${link}/events"
+				style="font-size: 14px; margin-right: 60px;">BROWSE EVENTS</a> <a
+				class="linkfooter" href="${link}/faq"
+				style="font-size: 14px; margin-right: 60px;">FAQ</a> <a
+				class="linkfooter" href="${link}/contact"
+				style="font-size: 14px; margin-right: 60px;">CONTACT US </a>
+		</div>
+		<div class="box-footer-right"
+			style="display: flex; padding: 20px 0; margin-left: auto; float: right;">
+			<label
+				style="font-size: 14px; margin-right: 32px; padding: 20px 0; float: left">Copyright
+				© 2019 At Table All rights reserved.</label>
+
+			<div class="icon-wrapper"
+				style="width: 42px; height: 42px; float: right;">
+				<a href="https://www.facebook.com/attable.thailand/"> <img
+					style="width: 100%;"
+					src="https://img.icons8.com/metro/52/000000/facebook-new--v2.png" />
+				</a>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

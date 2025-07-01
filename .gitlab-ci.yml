@@ -1,0 +1,99 @@
+image: docker:latest
+services:
+- docker:dind
+
+stages:
+- build
+- package
+- deploy
+variables:
+  DOCKER_DRIVER: overlay
+cache:
+  paths:
+  - .m2/repository
+
+#test-stating
+maven-build-test-staging:
+  image: maven:3-jdk-8
+  stage: build
+  variables:
+    MAVEN_OPTS: "-Dmaven.repo.local=.m2/repository"
+
+  script:
+  - mvn clean install -Dmaven.test.skip=true
+  artifacts:
+    paths:
+    - target/*.jar
+  only:
+  - test
+
+docker-build-test-staging:
+  stage: package
+  script:
+  - docker build -t artisandigitalasia/attable-backend:test-staging .
+  - docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+  - docker push artisandigitalasia/attable-backend:test-staging
+  only:
+  - test
+
+docker-compose-test-staging:
+  stage: deploy
+  before_script:
+  - apk add --no-cache py-pip      # <--
+  - pip install docker-compose~=1.23.0    # <--
+  - apk add --update curl && rm -rf /var/cache/apk/*
+  - mkdir test-staging-backend
+  - cp -f docker-compose-test-staging.yml test-staging-backend/docker-compose.yml
+  - cd test-staging-backend
+  script:
+  - docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+  - docker-compose -H $DOCKER_HOST pull
+  - docker-compose -H $DOCKER_HOST down
+  - docker-compose -H $DOCKER_HOST up -d
+  - docker -H $DOCKER_HOST system prune --force
+  only:
+  - test
+#end test-staging
+
+#stating
+maven-build-staging:
+  image: maven:3-jdk-8
+  stage: build
+  variables:
+    MAVEN_OPTS: "-Dmaven.repo.local=.m2/repository"
+
+  script:
+  - mvn clean install -Dmaven.test.skip=true
+  artifacts:
+    paths:
+    - target/*.jar
+  only:
+  - staging
+
+docker-build-staging:
+  stage: package
+  script:
+  - docker build -t artisandigitalasia/attable-backend:staging .
+  - docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+  - docker push artisandigitalasia/attable-backend:staging
+  only:
+  - staging
+
+docker-compose-staging:
+  stage: deploy
+  before_script:
+  - apk add --no-cache py-pip      # <--
+  - pip install docker-compose~=1.23.0    # <--
+  - apk add --update curl && rm -rf /var/cache/apk/*
+  - mkdir staging-backend
+  - cp -f docker-compose-staging.yml staging-backend/docker-compose.yml
+  - cd staging-backend
+  script:
+  - docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+  - docker-compose -H $DOCKER_HOST pull
+  - docker-compose -H $DOCKER_HOST down
+  - docker-compose -H $DOCKER_HOST up -d
+  - docker -H $DOCKER_HOST system prune --force
+  only:
+  - staging
+  #end staging

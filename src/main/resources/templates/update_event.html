@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>${subject}</title>
+<style>
+.linkfooter {
+	color: #333333 !important;
+	text-decoration: none !important;
+}
+</style>
+</head>
+<body
+	style="width: 100%; font-family: 'Roboto', Arial, Helvetica, sans-serif;">
+	<div style="padding: 40px; box-sizing: border-box; font-size: 14px;">
+		<p>Dear Chef ${firstName},</p>
+		<#if category==0>
+		<p>
+			Thank you for registering your first event with us. Your "Go Prac"
+			event (Event Number ${id}) for <strong>${eventName}</strong> is now
+			${eventstatus}
+		</p>
+		<p>For your first event, our team may attend to support you in
+			case of any urgency as well as possible photo taking and feedback
+			getting from diners in order for your future event's advertisement.
+			In case of attending, our team will contact you by your providing
+			mobile phone.</p>
+		<p>The event is now showing in our website. You can also see and
+			manage your event in "My Event" section or click below link.</p>
+		<#else>
+		<p>Your registration (Event Number ${id}) for ${eventName} is now
+			${eventstatus}</p>
+		<p>The event is now showing in our website. You can also see and
+			manage your event in "My Event" section or click below link.</p></#if>
+	</div>
+	<div class="box-confirm"
+		style="text-align: center; background-color: #800020; display: flex; padding: 40px; box-sizing: border-box;">
+		<p
+			style="color: white; width: 100%; text-align: center; font-size: 14px;">
+			<a style="color: white; padding: 0 10px;" href="${link}/event">Go
+				to My Events</a>
+		</p>
+	</div>
+	<#include "sincerely.html" parse=false encoding="UTF-8">
+	<div class="footer"
+		style="display: flex; flex-flow: row wrap; padding: 0 40px; background-color: #e6cdd3; height: 96px; box-sizing: border-box;">
+		<div class="box-footer-left" style="padding: 40px 0; float: left;">
+			<a class="linkfooter" href="${link}/events"
+				style="font-size: 14px; margin-right: 60px;">BROWSE EVENTS</a> <a
+				class="linkfooter" href="${link}/faq"
+				style="font-size: 14px; margin-right: 60px;">FAQ</a> <a
+				class="linkfooter" href="${link}/contact"
+				style="font-size: 14px; margin-right: 60px;">CONTACT US </a>
+		</div>
+		<div class="box-footer-right"
+			style="display: flex; padding: 20px 0; margin-left: auto; float: right;">
+			<label
+				style="font-size: 14px; margin-right: 32px; padding: 20px 0; float: left">Copyright
+				© 2019 At Table All rights reserved.</label>
+
+			<div class="icon-wrapper"
+				style="width: 42px; height: 42px; float: right;">
+				<a href="https://www.facebook.com/attable.thailand/"> <img
+					style="width: 100%;"
+					src="https://img.icons8.com/metro/52/000000/facebook-new--v2.png" />
+				</a>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

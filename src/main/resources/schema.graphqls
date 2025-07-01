@@ -1,0 +1,677 @@
+#map with date using format in https://github.com/donbeave/graphql-java-datetime
+scalar MyLocalDateTime
+
+type Event{
+    id: ID
+    eventName: String
+    eventType: EventType
+    eventCategory: EventCategory
+    eventDetail: String
+    status: EventStatus
+    pricePerSeat: Float
+    priceOriginal: Float
+    lat: Float
+    lng: Float
+    commission: Float
+    commissionType: CommissionType
+    homeNo: String
+    street: String
+    subDistrict: String
+    district: String
+    city: String
+    postalCode: String
+    startDate: MyLocalDateTime
+    endDate: MyLocalDateTime
+    rule: String
+    ownPlace: Boolean
+    approveDate: MyLocalDateTime
+    detailReject: [RejectEvent] @relation(name: "EventReject")
+    requestingDate: MyLocalDateTime
+    allergic: [Allergic] @relation(name: "EventAllergic")
+    subevent: [SubEvent] @relation(name: "EventSubEvent")
+    menu: [Menu] @relation(name: "EventMenu")
+    media: [Media] @relation(name: "EventMedia")
+    amenitiesPlace: [AmenitiesPlace] @relation(name: "EventAmenitiesPlace")
+    repeatOn: [RepeatOn] @relation(name: "EventRepeatOn")
+    chef: Chef @relation(name: "EventChef")
+}
+type RepeatOn{
+	id: ID
+	repeatOn: Int
+}
+type SubEvent{
+	id: ID
+	subIndex: Int
+	currentSeat: Int
+	minSeat: Int
+    maxSeat: Int
+    startTime: String
+    endTime: String
+    reasonCancel: String
+	cancelDate: MyLocalDateTime
+	eventDate: MyLocalDateTime
+	status: EventStatus
+	reserve: [Reservation] @relation(name: "SubEventReserve")
+	event: Event @relation(name: "SubEvent_Event")
+	payChef: PayChef @relation(name: "SubEventPayChef")
+}
+type Menu{
+	id: ID
+	foodtype: FoodType
+	subMenu: [SubMenu] @relation(name: "menuSubMenu")
+}
+type SubMenu{
+	id: ID
+	subMenuName: String
+	subMenuDescription: String
+}
+type AmenitiesPlace{
+	id: ID
+	amenitiesPlaceName: String
+}
+type Media{
+	id: ID
+	path: String
+}
+type Chef{
+	id: ID
+	homeNo: String
+	street: String
+	subDistrict: String
+	district: String
+	postalCode: String
+	occupation: String
+	favoriteCuisine: String
+	signatureDish: String
+	passportId: String
+	passportUrl: String
+	status: ChefStatus
+	approveDate: MyLocalDateTime
+	detailReject: [RejectChef] @relation(name: "ChefReject")
+	acc: Account @relation(name: "ChefAccount")
+	exp: [Experience] @relation(name: "ChefExperience")
+	user: User @relation(name: "ChefUser")
+	event: [Event] @relation(name: "ChefEvent")
+	reviewEvent: [ReviewEvent] @relation(name: "ChefReviewEvent")
+}
+type User{
+    id: ID
+    firstName: String
+	lastName: String
+    email: String
+    gender: Gender
+    birthday: MyLocalDateTime
+    registeredDate: MyLocalDateTime
+    phoneNumber: String
+    city: String
+	country: String
+    nationality: String
+    profileImage: String
+    isFacebookUser: Boolean
+    status: UserStatus
+    aboutMe: String
+    language: [Language] @relation(name: "UserLanguage")
+    roles: [Role] @relation(name: "UserRole")
+    allergic: [Allergic] @relation(name: "UserAllergic")
+    reserve: [Reservation] @relation(name: "UserReservation")
+    createdAt: MyLocalDateTime
+    updatedAt: MyLocalDateTime
+    chef: Chef @relation(name: "UserChef")
+}
+type Language {
+	id: ID
+	value: String
+}
+type RejectChef {
+	id: ID
+	rejectTitle: String
+	rejectText: String
+	rejectDate: MyLocalDateTime
+}
+type RejectEvent {
+	id: ID
+	rejectTitle: String
+	rejectText: String
+	rejectDate: MyLocalDateTime
+}
+type RejectReserve {
+	id: ID
+	rejectTitle: String
+	rejectText: String
+	rejectDate: MyLocalDateTime
+}
+type RejectDinerCancel{
+	id: ID
+	rejectTitle: String
+	rejectText: String
+	rejectDate: MyLocalDateTime
+}
+type Experience{
+	id: ID
+	cuisineType: String
+	expYear: String
+	aboutExp: String
+}
+type Allergic{
+	id: ID
+	allergicName: String
+}
+type Account{
+	id: ID
+	accountName: String
+	accountNumber: String
+	bankName: String
+	branch: String
+	bankStatementUrl: String
+}
+type AccountForRefund{
+	id: ID
+	accountName: String
+	accountNumber: String
+	bankName: String
+	branch: String
+	bankStatementUrl: String
+	slipUrl: String
+	dateTimetransfer: MyLocalDateTime
+	text: String
+	amount: Float
+	status: Boolean
+	reserve: Reservation @relation(name: "AccountForRefundReservation")
+}
+type Reservation{
+	id: ID
+	status: ReserveStatus
+	descriptionToKnow: String
+	aboutYou: String
+	seatNumber: String
+	reserveDate: MyLocalDateTime
+	requestingDate: MyLocalDateTime
+	approveDate: MyLocalDateTime
+	cancelDate: MyLocalDateTime
+	refundable: Boolean
+	detailReject: [RejectReserve] @relation(name: "ReservationReject")
+	detailCancelReject: [RejectDinerCancel] @relation(name: "ReservationRejectDinerCancel")
+	user: User @relation(name: "ReservationUser")
+	subevent: SubEvent @relation(name: "ReservationSubEvent")
+	payment: Payment @relation(name: "ReservationPayment")
+	join: [JoinEvent] @relation(name: "ReservationJoinEvent")
+	accountForRefund: AccountForRefund @relation(name: "ReservationAccountForRefund")
+	reviewEvent: ReviewEvent @relation(name: "ReservationReviewEvent")
+}
+type JoinEvent{
+	id: ID
+	firstName: String
+	lastName: String
+	allergic: [Allergic] @relation(name: "JoinerEventAllergic")
+}
+type Role{
+	id: ID
+	roleName: RoleName
+}
+type Payment{
+	id: ID
+	paymentMethod: PaymentMethod
+	transactionTime: MyLocalDateTime	
+	paymentDate: MyLocalDateTime
+	refId: String
+	bankName: String
+	price: Float
+	slipUrl: String
+	docUrl: String
+	reserve: Reservation @relation(name: "PaymentReservation")
+}
+type Banner{
+	id: ID
+	path: String
+	type: String
+}
+type ReviewEvent{
+	id: ID
+	rate1: Int
+	rate2: Int
+	rate3: Int
+	rate4: Int
+	rate5: Int
+	rate6: Int
+	rate7: Int
+	commentDate: MyLocalDateTime
+	comment: String
+	reserve: Reservation @relation(name: "ReviewEventReservation")
+	chef: Chef @relation(name: "ReviewEventChef")
+}
+type PayChef{
+	id: ID
+	slipUrl: String
+	dateTimeTransfer: MyLocalDateTime
+	transactionDate: MyLocalDateTime
+	text: String
+	subEvent: SubEvent @relation(name: "PayChefSubEvent")
+}
+type ReviewResponse{
+	totalPage: Int
+	totalElement: Int
+	reviewevents: [ReviewEvent]
+}
+type SubEventsResponse{
+	totalPage: Int
+	totalElement: Int
+	subevents: [SubEvent]
+}
+type RefundResponse{
+	success: Boolean
+	acc: AccountForRefund
+	error: String
+}
+type ConfigResponse{
+	eventReview: Int
+	eventRelease: Int
+	eventPrepare: Int
+	emailMinimumSeat: Int
+	emailConfirmSeat: Int
+}
+type DashboardResponse{
+	chefSignUp: Int
+	dinerSignUp: Int
+	eventRegistered: Int
+	eventCompleted: Int
+	eventCancelled: Int
+	chefCharge: Float
+	attableFee: Float
+}
+type TableResponse{
+	name: String
+}
+input inputContactUs{
+	id: ID
+	name: String
+	email: String
+	phoneNumber: String
+	subject: String
+	messages: String
+}
+type ContactUs{
+	id: ID
+	name: String
+	email: String
+	phoneNumber: String
+	subject: String
+	messages: String
+	contactDate: String
+	contactStatus: ContactStatus
+	answer: Boolean
+}
+type ContactUsResponse{
+	totalPage: Int
+	totalElement: Int
+	contacts: [ContactUs]
+}
+type PayChefResponse{
+	success: Boolean
+	payChef: PayChef
+	error: String
+}
+enum RoleName{
+    ROLE_DINER
+    ROLE_CHEF
+    ROLE_ADMIN
+}
+enum PaymentMethod{
+	CREDIT_CARD
+	BANK_TRANSFER
+}
+enum Gender{
+	Male
+	Female
+}
+enum CommissionType{
+	Rate
+	Absolute
+}
+enum UserStatus{
+	Pending_for_approval
+	Approved
+}
+enum ContactStatus{
+	Contact
+	Reply
+}
+enum ChefStatus{
+	Pending_for_approval
+	Approved
+	Reject
+	Clarify_for_request
+}
+enum EventCategory{
+	Go_Prac
+	Go_Live
+}
+enum EventStatus{
+	Requesting
+	Approved
+	Clarify_for_review
+	Reject
+	In_progress
+	Pending_for_confirm
+	Hold_Payment
+	Completed
+	Cancel_Requesting
+	Pending
+	Cancelled
+	Delete
+	Draft
+}
+enum ReserveStatus{
+	Requesting
+	Confirmed_Seat
+	Reject
+	Pending_Payment_Review
+	In_progress
+	Completed
+	Cancel_Requesting
+	Pending
+	Cancelled
+	Clarify_for_review_booking
+	Clarify_for_review_refund
+}
+enum FoodType{
+	STARTER
+	MAIN_COURSE
+	DESSERT
+	DRINKS_BEVERAGES
+}
+enum EventType{
+	Breakfast
+	Brunch
+	Lunch
+	Dinner
+	Special
+}
+enum FoodType{
+	STARTER
+	MAIN_COURSE
+	DESSERT
+	DRINKS_BEVERAGES
+}
+type EventsResponse{
+	totalPage: Int
+	totalElement: Int
+	events: [Event]
+}
+type EventResponse{
+	success: Boolean
+	event: Event
+	error: String
+}
+type SubEventResponse{
+	success: Boolean
+	subEvent: SubEvent
+	error: String
+}
+type ReservationsResponse{
+	totalPage: Int
+	totalElement: Int
+	reserve: [Reservation]
+}
+type DinersResponse{
+	totalPage: Int
+	totalElement: Int
+	diner: [User]
+}
+type ChefsResponse{
+	totalPage: Int
+	totalElement: Int
+	chef: [Chef]
+}
+type ReservationResponse{
+	success: Boolean
+	reserve: Reservation
+	error: String
+}
+type PaymentResponse{
+	success: Boolean
+	payment: Payment
+	error: String
+}
+type PaymentsResponse{
+	totalPage: Int
+	totalElement: Int
+	payment: [Payment]
+}
+type ForgotPasswordResponse{
+	success: Boolean
+	email: String
+	firstName: String
+	token: String
+}
+type ApiResponse{
+	success: Boolean
+	message: String
+}
+type UserResponse{
+	success: Boolean
+	user: User
+}
+
+type ChefEmailResponse{
+	success: Boolean
+	reject: RejectChef
+	chef: Chef
+}
+input inputEvent{
+	id: ID
+    eventName: String
+    eventType: EventType
+    eventCategory: EventCategory
+    eventDetail: String
+    status: EventStatus
+    pricePerSeat: Float
+    lat: Float
+    lng: Float
+    commission: Float
+    commissionType: CommissionType
+    homeNo: String
+    street: String
+    subDistrict: String
+    requestingDate: String
+    district: String
+    city: String
+    postalCode: String
+    startDate: String
+    endDate: String
+    repeatOn: [inputRepeatOn]
+    rule: String
+    ownPlace: Boolean
+    allergic: [inputAllergic]
+    subevent: [inputSubEvent]
+    media: [inputMedia]
+    menu: [inputMenu]
+    amenitiesPlace: [inputAmenitiesPlace]
+    chef: inputChef
+}
+input inputRepeatOn{
+	id: ID
+	repeatOn: Int
+}
+input inputMedia{
+	id: ID
+	path: String
+}
+input inputMenu{
+	id: ID
+	foodtype: FoodType
+	subMenu: [inputSubMenu]
+}
+input inputSubMenu{
+	id: ID
+	subMenuName: String
+	subMenuDescription: String
+}
+input inputAmenitiesPlace{
+	id: ID
+	amenitiesPlaceName: String
+}
+input inputSubEvent{
+	id: ID
+    minSeat: Int
+	currentSeat: Int
+    maxSeat: Int
+    startTime: String
+    endTime: String
+	approveOrRejectDate: String
+	cancelDate: String
+	eventDate: String
+	status: EventStatus
+}
+input inputUser{
+	id: ID
+	email: String
+	firstName: String
+	lastName: String
+	birthday: String
+	phoneNumber: String
+	gender: String
+	profileImage: String
+	city: String
+	country: String
+	nationality: String
+	language: [inputLanguage]
+	allergic: [inputAllergic]
+	aboutMe: String
+	chef: inputChef
+}
+input inputLanguage{
+	id: ID
+	value: String
+}
+input inputAllergic{
+	id: ID
+	allergicName: String
+}
+input inputAccount{
+	id: ID
+	accountName: String
+	accountNumber: String
+	bankName: String
+	branch: String
+	bankStatementUrl: String
+}
+input inputAccountForRefund{
+	id: ID
+	accountName: String
+	accountNumber: String
+	bankName: String
+	branch: String
+	bankStatementUrl: String
+	slipUrl: String
+	dateTimetransfer: String
+	text: String
+	amount: Float
+}
+input inputExperience{
+	id: ID
+	cuisineType: String
+	expYear: String
+	aboutExp: String
+}
+input inputChef{
+	id: ID
+	homeNo: String
+	street: String
+	subDistrict: String
+	district: String
+	postalCode: String
+	occupation: String
+	favoriteCuisine: String
+	signatureDish: String
+	passportId: String
+	passportUrl: String
+	acc: inputAccount
+	exp: [inputExperience]
+	user: inputUser
+}
+input inputReservation{
+	id: ID
+	status: ReserveStatus
+	descriptionToKnow: String
+	aboutYou: String
+	seatNumber: String
+	reserveDate: String
+	requestingDate: String
+	rejectOrApproveDate: String
+	cancelDate: String
+	subevent: inputSubEvent
+	payment: inputPayment
+	join: [inputJoinEvent]
+	detailReject: [inputRejectReserve]
+	detailCancelReject: [inputRejectCancelReserve]
+	accountForRefund: inputAccountForRefund
+	user: inputUser
+}
+input inputPayment{
+	id: ID
+	paymentMethod: PaymentMethod
+	cardHolderName: String
+	cardHolderNumber: String
+	bankName: String	
+	paymentDate: String
+	expiryDate: String
+	CVC: String
+	refId: String
+	price: Float
+	slipUrl: String
+	docUrl: String
+	reserve: inputReservation
+}
+input inputJoinEvent{
+	id: ID
+	firstName: String
+	lastName: String
+	allergic: [inputAllergic]
+}
+input inputUpdateEvent{
+	id: ID
+	status: EventStatus
+	eventType: EventType
+	commissionType: CommissionType
+	commission: Float
+	pricePerSeat: Float
+	detailReject: [inputRejectEvent]
+}
+input inputRejectEvent{
+	rejectTitle: String
+	rejectText: String
+}
+input inputRejectReserve{
+	rejectTitle: String
+	rejectText: String
+}
+input inputRejectChef{
+	rejectTitle: String
+	rejectText: String
+}
+input inputRejectCancelReserve{
+	rejectTitle: String
+	rejectText: String
+}
+input inputUpdateChef{
+	id: ID
+	status: ChefStatus
+	detailReject: [inputRejectChef]
+}
+input inputPayChef{
+	slipUrl: String
+	dateTimeTransfer: String
+	text: String
+	#chef: inputChef
+	subEvent: inputSubEvent
+}
+input inputReviewEvent{
+	rate1: Int
+	rate2: Int
+	rate3: Int
+	rate4: Int
+	rate5: Int
+	rate6: Int
+	rate7: Int
+	comment: String
+}

@@ -1,0 +1,35 @@
+version: '2'
+services:
+  db-mysql:
+   container_name: db-mysql
+   image: mysql/mysql-server:5.7
+   command: mysqld --character-set-server=utf8 --collation-server=utf8_unicode_ci --init-connect='SET NAMES UTF8;' --innodb-flush-log-at-trx-commit=0
+   environment:
+    MYSQL_DATABASE: attableDB
+    MYSQL_ROOT_PASSWORD: admin1234
+    MYSQL_ROOT_HOST: '%'
+   restart: always
+   volumes:
+      - mysql-db:/var/lib/mysql
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 12111:8080
+  app:
+    restart: always
+    image: artisandigitalasia/attable-backend:prod
+    # build: .
+    environment:
+       - "SPRING_PROFILES_ACTIVE=prod" 
+    ports:
+      - 12110:8080
+    depends_on:
+      - db-mysql
+    links:
+      - db-mysql
+volumes:
+  mysql-db:
+
+#Clean and build .jar file
+#mvn install -DskipTests

@@ -1,0 +1,109 @@
+schema {
+    query: Query
+    mutation: Mutation
+}
+
+type Query{
+	#[Event] Queries
+	getListAllEvents(page: Int, pagesize: Int): EventsResponse
+	getListRequestingEvents(page: Int, pagesize: Int): EventsResponse
+	getListUpcommingEvents(page: Int, pagesize: Int): EventsResponse
+	getListInprogressEvents(page: Int, pagesize: Int): EventsResponse
+	getListCompleteEvents(page: Int, pagesize: Int): EventsResponse
+	getListCancelEvents(page: Int, pagesize: Int): EventsResponse
+	getListAllSubEvents(page: Int, pagesize: Int): SubEventsResponse
+	getListRequestingSubEvents(page: Int, pagesize: Int): SubEventsResponse
+	getListUpcommingSubEvents(page: Int, pagesize: Int): SubEventsResponse
+	getListInprogressSubEvents(page: Int, pagesize: Int): SubEventsResponse
+	getListCompleteSubEvents(page: Int, pagesize: Int): SubEventsResponse
+	getListCancelSubEvents(page: Int, pagesize: Int): SubEventsResponse
+	getEventById(id: Long): Event
+	getSubEventById(id: Long): SubEvent
+
+	#[User] Queries
+	getUserById(id: Long): User
+	getChefById(id: Long): Chef
+	getChefByUserId(id: Long): Chef
+	getListReservationUserById(page: Int, pagesize: Int, id: Long): ReservationsResponse
+	listChefByPagination(page: Int, pagesize: Int): ChefsResponse
+	listDinerByPagination(page: Int, pagesize: Int): DinersResponse
+	forgetPassword(email: String): ForgotPasswordResponse
+    changePassword(token: String, email: String, password: String): ApiResponse
+    checkDupplicateEmail(email: String): ApiResponse
+
+    #[Sample] Queries
+    getListAllergics: [Allergic]
+    getListBanner: [Banner]
+   
+    #[Reservation] Queries
+    listReservationPagination(page: Int, pagesize: Int): ReservationsResponse
+    listRequestingReservationPagination(page: Int, pagesize: Int): ReservationsResponse
+    listRejectReservationPagination(page: Int, pagesize: Int): ReservationsResponse
+    listConfirmSeatReservationPagination(page: Int, pagesize: Int): ReservationsResponse
+    listCancelReservationPagination(page: Int, pagesize: Int): ReservationsResponse
+    getReservationById(id: Long): Reservation
+    listPaymentPagination(page: Int, pagesize: Int): PaymentsResponse
+	getPaymentById(id: Long): Payment
+	listAllDinerInSubEventBySubEventId(id: Long): [Reservation]
+	
+    #[ReviewEvent] Queries
+    getReviews(page: Int, pagesize: Int): ReviewResponse
+    getReviewByReservationId(reserveId: Long): ReviewEvent
+    getReviewByChefId(page: Int, pagesize: Int, chefId: Long): ReviewResponse
+    getReviewById(reviewId: Long): ReviewEvent
+
+    #[ContactUs] Queries
+    getAllContacts(page: Int, pagesize: Int): ContactUsResponse
+    getContactByID(id: Long): ContactUs
+    getContactsByName(page: Int, pagesize: Int, name: String): ContactUsResponse
+    getContactsByEmail(page: Int, pagesize: Int, email: String): ContactUsResponse
+    
+    #[Config] Queries
+    getConfig: ConfigResponse
+    
+    #[Dashboard] Queries
+    getDashBoardDetail(fromDate: String, toDate: String): DashboardResponse
+    getlistAllTable: [String]
+}
+
+type Mutation{
+    #[Event] Mutation
+    createEvent(event: inputEvent): EventResponse
+    editEvent(event: inputEvent): EventResponse
+    editSubEvent(subEvent: inputSubEvent): SubEventResponse
+    editEventStatus(event: inputUpdateEvent): EventResponse
+    cancelEvent(id: Long): EventResponse
+    cancelSubEvent(id: Long, reasonCancel: String): SubEventResponse
+    updateCompletedEventStatus(payChef: inputPayChef): PayChefResponse
+    updateCancelSubEventStatus(subEvent: inputSubEvent): SubEventResponse
+   
+    #[User] Mutation
+    updateProfileDiner(user: inputUser): UserResponse
+    editProfileDiner(user: inputUser): UserResponse
+    updateProfileChef(chef: inputChef): UserResponse
+    editProfileChef(chef: inputChef): UserResponse
+
+    #[Reservation] Mutation
+    bookingEvent(booking: inputReservation): ReservationResponse
+    paymentBooking(payment: inputPayment): ReservationResponse
+    editReservationStatus(reserve: inputReservation): ReservationResponse
+	cancelReservation(id: Long): ReservationResponse
+	updateCancelReservationStatus(reserve: inputReservation): ReservationResponse
+	
+    #[Chef] Mutation
+    editChefStatus(chef: inputUpdateChef): ChefEmailResponse
+
+    #[ReviewEvent] Mutation
+    createReviewEvent(reviewEvent: inputReviewEvent,reserveId: Long,chefId: Long): ReviewEvent
+
+    #[ContactUs] Mutaion
+    createContact(contactUs: inputContactUs): ContactUs
+    replyContact(contactUs: inputContactUs): ContactUs
+
+    #[Payment] Mutaion
+    updatePaymentStatus(paymentId: Long,status: ReserveStatus): PaymentResponse
+
+    #[AccountForRefund] Mutaion
+    addBankaccountForRefund(reserve: inputReservation, authToken: String): RefundResponse
+    updateBankAccountForRefund(reserve: inputReservation): RefundResponse
+}
