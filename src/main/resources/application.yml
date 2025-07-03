@@ -97,7 +97,7 @@ spring:
         protocol: smtps
         test-connection: false
     jpa:
-        show-sql: true
+        show-sql: false
         hibernate:
             ddl-auto: update
         properties:
