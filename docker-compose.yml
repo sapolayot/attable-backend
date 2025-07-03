@@ -11,6 +11,7 @@ services:
             - "DB_PASSWORD=BpEcPxuEZRzWmVqXTnbnfpOLlpzrrSzA"
             - "JWT_SECRET=JWTSuperSecretKey"
             - "OMISE_KEY=skey_test_5gwxqp61kiy214mn2la"
+            - "MAIL_USERNAME=sapolayot.nantawong@gmail.com"
+            - "MAIL_PASSWORD=Lampang005001234"
         ports:
             - 8080:8080
-

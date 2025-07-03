@@ -85,7 +85,19 @@ spring:
         tomcat:
             driver-class-name: com.mysql.jdbc.Driver
             connection-properties: useUnicode=true;characterEncoding=utf-8;
-
+    mail:
+        default-encoding: UTF-8
+        host: smtp.gmail.com
+        port: 465
+        username: ${MAIL_USERNAME}
+        password: ${MAIL_PASSWORD}
+        properties:
+            mail:
+                smtp:
+                    auth: true
+                    starttls.enable: true
+        protocol: smtps
+        test-connection: false
     jpa:
         show-sql: true
         hibernate:
