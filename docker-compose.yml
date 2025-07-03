@@ -1,40 +1,15 @@
-version: '3.2'
+version: "3.2"
 services:
-  attable-frontend-staging:
-    image: artisandigitalasia/front-attable:staging
-    ports:
-      - 1000:80
-    links:
-      - app
-  attable-front-admin:
-    image: artisandigitalasia/front-admin-attable:staging
-    ports:
-      - 1001:80
-    links:
-      - app
-  db-mysql-staging:
-   container_name: db-mysql-staging
-   image: mysql/mysql-server:5.7
-   command: mysqld --character-set-server=utf8 --collation-server=utf8_unicode_ci --init-connect='SET NAMES UTF8;' --innodb-flush-log-at-trx-commit=0
-   environment:
-    MYSQL_DATABASE: attableDB
-    MYSQL_ROOT_PASSWORD: admin1234
-    MYSQL_ROOT_HOST: '%'
-    TZ: Asia/Bangkok
-   restart: always
-   volumes:
-      - mysql-db-staging:/var/lib/mysql
-  app:
-    restart: always
-    image: artisandigitalasia/attable-backend:staging
-    #build: .
-    environment:
-       - "SPRING_PROFILES_ACTIVE=staging"
-    ports:
-      - 1002:8080
-    depends_on:
-      - db-mysql-staging
-    links:
-      - db-mysql-staging
-volumes:
-  mysql-db-staging:
+    app:
+        restart: always
+        # image: artisandigitalasia/attable-backend:staging
+        build: .
+        environment:
+            - "SPRING_PROFILES_ACTIVE=prod"
+            - "SPRING_DATASOURCE_URL=jdbc:mysql://turntable.proxy.rlwy.net:24510/attableDB?createDatabaseIfNotExist=true&serverTimezone=Asia/Bangkok&useLegacyDatetimeCode=false"
+            - "DB_USERNAME=root"
+            - "DB_PASSWORD=BpEcPxuEZRzWmVqXTnbnfpOLlpzrrSzA"
+            - "JWT_SECRET=JWTSuperSecretKey"
+            - "OMISE_KEY=skey_test_5gwxqp61kiy214mn2la"
+        ports:
+            - 8080:8080
