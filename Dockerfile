@@ -1,5 +1,5 @@
 # Stage 1: Build with Maven
-FROM maven:3.8.7-openjdk-8 AS builder
+FROM maven:3.8.6-jdk-8-slim AS builder
 WORKDIR /app
 COPY . .
 RUN mvn clean install -DskipTests
