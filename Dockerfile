@@ -18,4 +18,4 @@ RUN apk add --no-cache tzdata && \
 
 COPY --from=builder /app/target/AttableBackendGraphQL-0.0.1-SNAPSHOT.jar app.jar
 EXPOSE 8080
-ENTRYPOINT ["java", "-jar", "app.jar"]
+ENTRYPOINT ["java", "-Xms128m", "-Xmx256m", "-XX:MaxMetaspaceSize=128m", "-jar", "app.jar"]
