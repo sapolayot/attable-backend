@@ -93,3 +93,8 @@ spring:
         properties:
             hibernate:
                 dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+linux: true
+physicalImageLocation: /images/
+admin:
+    email:
+        senderEmail: sapolayot.nantawong@gmail.com

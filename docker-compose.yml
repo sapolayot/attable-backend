@@ -13,3 +13,4 @@ services:
             - "OMISE_KEY=skey_test_5gwxqp61kiy214mn2la"
         ports:
             - 8080:8080
+
