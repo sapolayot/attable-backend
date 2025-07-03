@@ -1,0 +1,95 @@
+spring:
+    profiles:
+        active:
+            - prod
+    servlet:
+        multipart:
+            enabled: true
+            file-size-threshold: 2KB
+            max-file-size: 1024MB
+            max-request-size: 1024MB
+    datasource:
+        max-active: 50
+graphql:
+    servlet:
+        mapping: /graphql
+        corsEnabled: true
+        enabled: true
+        websocket:
+            enabled: false
+    datetime:
+        scalars:
+            localDateTime:
+                scalarName: MyLocalDateTime
+app:
+    jwtSecret: ${JWT_SECRET}
+    jwtExpirationInMs: 21600000
+
+omise:
+    omisekey: ${OMISE_KEY}
+emailform:
+    template:
+        signupdiner: "email_signup_diner.html"
+        signupchef: "email_signup_chef.html"
+        contactus: "contactus.html"
+        forgetpassword: "forgetpassword.html"
+        update_event: "update_event.html"
+        update_chef: "update_chef.html"
+        cancel_event: "cancel_event.html"
+        booking: "booking.html"
+        ac_hoc: "ac_hoc_cancellation.html"
+        cancel_booking_diner: "cancel_booking_diner.html"
+        cancel_booking_chef: "cancel_booking_chef.html"
+        clarify: "clarify.html"
+        completed_event: "completed_event.html"
+        minimum_seat: "minimum_seat.html"
+        refund_completed: "refund_completed.html"
+        refund_incomplete: "refund_incomplete.html"
+        reviewbooking: "reviewbooking.html"
+        summary_before_five: "summary_before_five.html"
+        summary_before_seven: "summary_before_seven.html"
+        summary_tomorrow: "summary_tomorrow.html"
+        weekly_report: "weekly_report.html"
+    subject:
+        signup: "Welcome to At Table !"
+        contactus: "At table"
+        forgetpassword: "Reset your password"
+        update_event: "Event Registration"
+googleServicesJSONFile: firebase/attable-992d5-firebase-adminsdk.json
+firebaseDatabaseUrl: https://attable-992d5.firebaseio.com
+notification:
+    time: 0 0 0 * * *
+event:
+    interval: 1000
+subevent:
+    interval: 1000
+    clearTime: 0 0 0 * * *
+gapDay:
+    eventReview: 7
+    eventRelease: 7
+    eventPrepare: 7
+    emailMinimumSeat: 9
+    emailConfirmSeat: 5
+---
+spring:
+    profiles: prod
+    datasource:
+        url: ${SPRING_DATASOURCE_URL}
+        username: ${DB_USERNAME}
+        password: ${DB_PASSWORD}
+
+        # Keep the connection alive if idle for a long time (needed in production)
+        testWhileIdle: true
+        validationQuery: SELECT 1
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        tomcat:
+            driver-class-name: com.mysql.jdbc.Driver
+            connection-properties: useUnicode=true;characterEncoding=utf-8;
+
+    jpa:
+        show-sql: true
+        hibernate:
+            ddl-auto: update
+        properties:
+            hibernate:
+                dialect: org.hibernate.dialect.MySQL5InnoDBDialect
