@@ -1,18 +1,17 @@
 package com.project.attable.repository;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import com.google.firebase.auth.FirebaseToken;
+// import com.google.firebase.auth.FirebaseToken;
 import com.project.attable.entity.RoleName;
 import com.project.attable.entity.User;
-
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {

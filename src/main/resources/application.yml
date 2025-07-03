@@ -55,8 +55,6 @@ emailform:
         contactus: "At table"
         forgetpassword: "Reset your password"
         update_event: "Event Registration"
-googleServicesJSONFile: firebase/attable-992d5-firebase-adminsdk.json
-firebaseDatabaseUrl: https://attable-992d5.firebaseio.com
 notification:
     time: 0 0 0 * * *
 event:
@@ -107,6 +105,8 @@ spring:
                 dialect: org.hibernate.dialect.MySQL5InnoDBDialect
 linux: true
 physicalImageLocation: /images/
+imageServer: ${HOST_BACKEND}/images/
+linkEmail: ${HOST_FRONTEND}
 admin:
     email:
         senderEmail: sapolayot.nantawong@gmail.com

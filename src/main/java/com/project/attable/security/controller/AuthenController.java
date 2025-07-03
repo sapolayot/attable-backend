@@ -1,5 +1,11 @@
 package com.project.attable.security.controller;
 
+import java.net.URI;
+import java.util.Collections;
+import java.util.Map;
+
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -9,9 +15,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseAuthException;
-import com.google.firebase.auth.FirebaseToken;
+// import com.google.firebase.auth.FirebaseAuth;
+// import com.google.firebase.auth.FirebaseAuthException;
+// import com.google.firebase.auth.FirebaseToken;
 import com.project.attable.entity.Role;
 import com.project.attable.entity.User;
 import com.project.attable.entity.UserStatus;
@@ -20,17 +26,11 @@ import com.project.attable.repository.UserRepository;
 import com.project.attable.security.GenerateToken;
 import com.project.attable.security.JwtTokenProvider;
 import com.project.attable.security.repository.RoleRepository;
-import com.project.attable.security.requestmodel.FacebookAuthData;
 import com.project.attable.security.requestmodel.LoginRequest;
 import com.project.attable.security.requestmodel.SignUpRequest;
 import com.project.attable.security.responsemodel.JwtAuthenticationResponse;
 import com.project.attable.security.responsemodel.SignInResponse;
 import com.project.attable.security.responsemodel.SignUpResponse;
-
-import javax.validation.Valid;
-import java.net.URI;
-import java.util.Collections;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/auth")
@@ -116,54 +116,54 @@ public class AuthenController {
 	//Add resend token
 	
 
-	@PostMapping("/fbauth")
-	public ResponseEntity<?> authenticationByFacebook(@Valid @RequestBody FacebookAuthData facebookAuthData) {
-		try {
-			FirebaseToken data = FirebaseAuth.getInstance().verifyIdToken(facebookAuthData.getToken());
+	// @PostMapping("/fbauth")
+	// public ResponseEntity<?> authenticationByFacebook(@Valid @RequestBody FacebookAuthData facebookAuthData) {
+	// 	try {
+	// 		FirebaseToken data = FirebaseAuth.getInstance().verifyIdToken(facebookAuthData.getToken());
 
-			if (data.isEmailVerified()) {
-				return ResponseEntity.ok().body("Email not verified");
-			}
-			if (userRepository.existsByEmail(facebookAuthData.getEmail())) {
-				User queryuser = userRepository.findByEmailIn(facebookAuthData.getEmail());
-				try {
-					String jwt = GenerateToken.getTokenNotExpired(facebookAuthData.getEmail());
+	// 		if (data.isEmailVerified()) {
+	// 			return ResponseEntity.ok().body("Email not verified");
+	// 		}
+	// 		if (userRepository.existsByEmail(facebookAuthData.getEmail())) {
+	// 			User queryuser = userRepository.findByEmailIn(facebookAuthData.getEmail());
+	// 			try {
+	// 				String jwt = GenerateToken.getTokenNotExpired(facebookAuthData.getEmail());
 
-					return ResponseEntity.ok(new JwtAuthenticationResponse(jwt, queryuser));
-				} catch (Exception e) {
-					e.printStackTrace();
-					return ResponseEntity.badRequest().body("Please check email or password again");
-				}
-			}
+	// 				return ResponseEntity.ok(new JwtAuthenticationResponse(jwt, queryuser));
+	// 			} catch (Exception e) {
+	// 				e.printStackTrace();
+	// 				return ResponseEntity.badRequest().body("Please check email or password again");
+	// 			}
+	// 		}
 
-			User user = new User();
-			user.setFirstName(facebookAuthData.getFirstName());
-			user.setLastName(facebookAuthData.getLastName());
-			user.setEmail(facebookAuthData.getEmail());
-			user.setPassword(passwordEncoder.encode(facebookAuthData.getUid()));
-			user.setProfileImage(facebookAuthData.getProfileImage());
-			user.setBirthday(facebookAuthData.getBirthday());
-			user.setStatus(UserStatus.Pending_for_approval);
-			user.setFacebookUser(true);
-			Role userRole = roleRepository.findByRoleNameIn(facebookAuthData.getRoleName());
+	// 		User user = new User();
+	// 		user.setFirstName(facebookAuthData.getFirstName());
+	// 		user.setLastName(facebookAuthData.getLastName());
+	// 		user.setEmail(facebookAuthData.getEmail());
+	// 		user.setPassword(passwordEncoder.encode(facebookAuthData.getUid()));
+	// 		user.setProfileImage(facebookAuthData.getProfileImage());
+	// 		user.setBirthday(facebookAuthData.getBirthday());
+	// 		user.setStatus(UserStatus.Pending_for_approval);
+	// 		user.setFacebookUser(true);
+	// 		Role userRole = roleRepository.findByRoleNameIn(facebookAuthData.getRoleName());
 
-			user.setRoles(Collections.singleton(userRole));
+	// 		user.setRoles(Collections.singleton(userRole));
 
-			User result = userRepository.save(user);
+	// 		User result = userRepository.save(user);
 
-			URI location = ServletUriComponentsBuilder.fromCurrentContextPath().path("/users/{userId}")
-					.buildAndExpand(result.getId()).toUri();
+	// 		URI location = ServletUriComponentsBuilder.fromCurrentContextPath().path("/users/{userId}")
+	// 				.buildAndExpand(result.getId()).toUri();
 
-			String jwt = GenerateToken.getTokenNotExpired(facebookAuthData.getEmail());
+	// 		String jwt = GenerateToken.getTokenNotExpired(facebookAuthData.getEmail());
 
-			return ResponseEntity.created(location)
-					.body(new SignUpResponse(true, "You have successfully signed up.", jwt, user.getEmail(),
-							user.getFirstName(), user.getLastName(), user.getRoles(), user.isFacebookUser()));
-		} catch (FirebaseAuthException e) {
-			e.printStackTrace();
-			return ResponseEntity.badRequest().body(e.getMessage());
-		}
+	// 		return ResponseEntity.created(location)
+	// 				.body(new SignUpResponse(true, "You have successfully signed up.", jwt, user.getEmail(),
+	// 						user.getFirstName(), user.getLastName(), user.getRoles(), user.isFacebookUser()));
+	// 	} catch (FirebaseAuthException e) {
+	// 		e.printStackTrace();
+	// 		return ResponseEntity.badRequest().body(e.getMessage());
+	// 	}
 
-	}
+	// }
 
 }
